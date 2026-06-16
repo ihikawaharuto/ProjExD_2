@@ -48,6 +48,20 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]: # 演習02 / 爆弾の
     bb_accs = [a for a in range(1, 11)]
     return bb_imgs, bb_accs
 
+def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]: # 演習03 / 飛ぶ方向に従ってこうかとん画像を切り替え
+    kk_dict = {
+        (0, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9),
+        (5, 0): pg.transform.flip(pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9), True, False),
+        (5, 5): pg.transform.flip(pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 0.9), True, False),
+        (0, 5): pg.transform.flip(pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 0.9), True, False),
+        (-5, 5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 0.9),
+        (-5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9),
+        (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 0.9),
+        (0, -5): pg.transform.flip(pg.transform.rotozoom(pg.image.load("fig/3.png"), -90, 0.9), True, False),
+        (5, -5): pg.transform.flip(pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 0.9), True, False)
+    }
+    return kk_dict
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -67,6 +81,7 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)  # 縦初期座標
     vx, vy = +5, +5
 
+    kk_dict = get_kk_imgs() # 演習03 / 飛ぶ方向に従ってこうかとん画像を切り替え
 
     clock = pg.time.Clock()
     tmr = 0
@@ -96,6 +111,8 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  # 横方向の移動量
                 sum_mv[1] += mv[1]  # 縦方向の移動量
+        
+        kk_img = kk_dict[tuple(sum_mv)]
             
         kk_rct.move_ip(sum_mv)
         screen.blit(kk_img, kk_rct)
