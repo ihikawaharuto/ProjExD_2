@@ -49,6 +49,10 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+        if kk_rct.colliderect(bb_rct):  # こうかとんRectと爆弾Rectが重なったら
+            print("ゲームオーバー")
+            return
+        screen.blit(bg_img, [0, 0]) 
         screen.blit(bg_img, [0, 0]) 
         if check_bound(kk_rct) != (True, True):   # 練習問題03 / 画面外に出たら元に戻す
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
